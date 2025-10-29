@@ -225,56 +225,15 @@ void MainWindow::onDetachFromGame()
     }
 }
 
-// Checksum algorithm used by the game. Essentially just copied the pseudo code from Ghidra, need to clean this up at some point
+// Checksum algorithm used by the game.
 unsigned long long MainWindow::GenerateChecksum(unsigned long long* param_1)
 {
-        unsigned long long *puVar1;
-        unsigned long long *puVar2;
-        unsigned long long uVar3;
-        unsigned long long *puVar4;
-        unsigned long long uVar5;
-        unsigned long long uVar6;
-        unsigned long long uVar7;
-        unsigned long long uVar8;
-        unsigned long long uVar9;
-        unsigned long long uVar10;
-
-        uVar5 = 0;
-        uVar3 = 0x9be6fa3b72afda1d;
-        puVar4 = param_1;
-        for (uVar6 = (unsigned long long)(param_1 <= param_1 + 1); uVar6 != 0; uVar6 = uVar6 - 1) {
-            uVar3 = uVar3 ^ *puVar4;
-            puVar4 = puVar4 + 1;
-        }
-        puVar4 = param_1 + 2;
-        uVar6 = 0x2e52;
-        if (param_1 + 0x2e54 < puVar4) {
-            uVar6 = uVar5;
-        }
-        if (uVar6 != 0) {
-            if (puVar4 <= param_1 + 0x2e54) {
-                uVar7 = 0;
-                uVar8 = 0;
-                uVar9 = uVar7;
-                uVar10 = uVar8;
-                do {
-                    uVar5 = uVar5 + 4;
-                    uVar7 = *puVar4 ^ uVar7;
-                    uVar8 = puVar4[1] ^ uVar8;
-                    puVar1 = puVar4 + 2;
-                    puVar2 = puVar4 + 3;
-                    puVar4 = puVar4 + 4;
-                    uVar9 = *puVar1 ^ uVar9;
-                    uVar10 = *puVar2 ^ uVar10;
-                } while (uVar5 < (uVar6 & 0xfffffffffffffffc));
-                uVar3 = uVar3 ^ uVar9 ^ uVar7 ^ uVar10 ^ uVar8;
-            }
-            for (; uVar5 < uVar6; uVar5 = uVar5 + 1) {
-                uVar3 = uVar3 ^ *puVar4;
-                puVar4 = puVar4 + 1;
-            }
-        }
-        return uVar3;
+    uint64_t ret = 0x9be6fa3b72afda1d ^ param_1[0];
+    for (size_t i = 2 ; i < 0x2e54 ; i++)
+    {
+        ret ^= param_1[i];
+    }
+    return ret;
 }
 
 MainWindow::MainWindow(QWidget *parent)
